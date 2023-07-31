@@ -3,21 +3,23 @@ package org.example.dao;
 import java.util.*;
 
 public class Eurojackpot extends Tippreihe {
-    private int[] zweiAusZehn;
+    private HashSet<Integer> zweiAusZehn;
     public Eurojackpot() {
-        setTippreihe(new int[5]);
-        setZweiAusZehn(new int[2]);
+        setTippreihe(new HashSet<Integer>());
+        setZweiAusZehn(new HashSet<Integer>());
         setSuperzahl(0);
-        setUnglückszahlen(new int[6]);
+        setUnglückszahlen(new HashSet<Integer>());
     }
-    public Eurojackpot(int[] unglückszahlen, int[] tippreihe, int superzahl, int[] zweiAusZehn) {
-        super(unglückszahlen, tippreihe, superzahl);
+    public Eurojackpot(HashSet<Integer> unglückszahlen, HashSet<Integer> tippreihe, int superzahl, HashSet<Integer> zweiAusZehn) {
+        super(unglückszahlen, tippreihe, superzahl, LottoTyp.EUROJACKPOT);
         this.zweiAusZehn = zweiAusZehn;
     }
-    public int[] getZweiAusZehn() {
+
+    public HashSet<Integer> getZweiAusZehn() {
         return zweiAusZehn;
     }
-    public void setZweiAusZehn(int[] zweiAusZehn) {
+
+    public void setZweiAusZehn(HashSet<Integer> zweiAusZehn) {
         this.zweiAusZehn = zweiAusZehn;
     }
 
