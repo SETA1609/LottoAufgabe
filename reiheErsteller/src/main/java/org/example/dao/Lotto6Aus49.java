@@ -6,8 +6,8 @@ public class Lotto6Aus49 extends Tippreihe{
     public Lotto6Aus49() {
     }
 
-    public Lotto6Aus49(HashSet<Integer> unglückszahlen, HashSet<Integer> tippreihe, int superzahl) {
-        super(unglückszahlen, tippreihe, superzahl, LottoTyp.LOTTO6AUS49);
+    public Lotto6Aus49(HashSet<Integer> unglückszahlen) {
+        super(unglückszahlen,LottoTyp.LOTTO6AUS49);
     }
 
     @Override

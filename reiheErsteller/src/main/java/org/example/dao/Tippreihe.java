@@ -10,16 +10,21 @@ public class Tippreihe {
 
     public Tippreihe() {
         setUnglückszahlen(new HashSet<Integer>());
-        setTippreihe(new HashSet<Integer>());
-        setSuperzahl(0);
+        setTippreihe();
+        setSuperzahl((int) (Math.random()*10));
         setLottoTyp(LottoTyp.LOTTO6AUS49);
     }
 
-    public Tippreihe(HashSet<Integer> unglückszahlen, HashSet<Integer> tippreihe, int superzahl, LottoTyp lottoTyp) {
-        this.unglückszahlen = unglückszahlen;
-        this.tippreihe = tippreihe;
-        this.superzahl = superzahl;
-        this.lottoTyp = lottoTyp;
+    public Tippreihe(HashSet<Integer> unglückszahlen) {
+       setUnglückszahlen(unglückszahlen);
+       setTippreihe();
+       setLottoTyp(LottoTyp.LOTTO6AUS49);
+       setSuperzahl((int) (Math.random()*10));
+    }
+
+    public Tippreihe(HashSet<Integer> unglückszahlen, LottoTyp lottoTyp) {
+        setUnglückszahlen(unglückszahlen);
+        setLottoTyp(lottoTyp);
     }
 
     public  HashSet<Integer> getUnglückszahlen() {
@@ -34,8 +39,33 @@ public class Tippreihe {
         return tippreihe;
     }
 
-    public void setTippreihe(HashSet<Integer> tippreihe) {
-        this.tippreihe = tippreihe;
+    public void setTippreihe() {
+        tippreihe.clear();
+        int obereGrenze=0;
+        switch (lottoTyp){
+            case LOTTO6AUS49 -> obereGrenze=50;
+            case EUROJACKPOT -> obereGrenze=51;
+        }
+
+        int randomInt;
+        if (lottoTyp==LottoTyp.EUROJACKPOT){
+            while (tippreihe.size()<=5){
+                randomInt= (int) (Math.random()*obereGrenze);
+                if (!tippreihe.contains(randomInt) && !unglückszahlen.contains(randomInt)){
+                    tippreihe.add(randomInt);
+                }
+            }
+        }else {
+            while (tippreihe.size()<=6){
+                randomInt= (int) (Math.random()*obereGrenze);
+                if (!tippreihe.contains(randomInt) && !unglückszahlen.contains(randomInt)){
+                    tippreihe.add(randomInt);
+                }
+            }
+        }
+
+
+
     }
 
     public int getSuperzahl() {

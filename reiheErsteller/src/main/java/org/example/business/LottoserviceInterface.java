@@ -9,13 +9,13 @@ import org.example.exeptions.InvalidInputExeption;
 import java.util.HashSet;
 
 public interface LottoserviceInterface {
-
-    public Lotto6Aus49 lotto6Aus49Erstellen();
-    public Eurojackpot eurojackpotErstellen();
+    public void lotto6Aus49Erstellen();
+    public void eurojackpotErstellen();
     public void unglückszahlenBearbeiten();
     public HashSet<Integer> unglückszahlenErstellen(LottoTyp lottoTyp, String input) throws InvalidInputExeption;
     public  HashSet<Integer> addUnglückszahl(int i, HashSet<Integer> unglückszahlen);
     public HashSet<Integer> deleteUnglückszahl(int i, HashSet<Integer> unglückszahlen);
+    public void information();
     public void abschließen();
     public void starten();
 

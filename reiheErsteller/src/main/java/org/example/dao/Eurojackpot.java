@@ -5,22 +5,28 @@ import java.util.*;
 public class Eurojackpot extends Tippreihe {
     private HashSet<Integer> zweiAusZehn;
     public Eurojackpot() {
-        setTippreihe(new HashSet<Integer>());
-        setZweiAusZehn(new HashSet<Integer>());
-        setSuperzahl(0);
-        setUnglückszahlen(new HashSet<Integer>());
+        super();
+        setZweiAusZehn();
     }
-    public Eurojackpot(HashSet<Integer> unglückszahlen, HashSet<Integer> tippreihe, int superzahl, HashSet<Integer> zweiAusZehn) {
-        super(unglückszahlen, tippreihe, superzahl, LottoTyp.EUROJACKPOT);
-        this.zweiAusZehn = zweiAusZehn;
+    public Eurojackpot(HashSet<Integer> unglückszahlen) {
+        super(unglückszahlen, LottoTyp.EUROJACKPOT);
+
     }
 
     public HashSet<Integer> getZweiAusZehn() {
         return zweiAusZehn;
     }
 
-    public void setZweiAusZehn(HashSet<Integer> zweiAusZehn) {
-        this.zweiAusZehn = zweiAusZehn;
+    public void setZweiAusZehn() {
+
+        int randomInt;
+        while (zweiAusZehn.size()<=2){
+            randomInt= (int) (Math.random()*11);
+            if (!zweiAusZehn.contains(randomInt) && !super.getUnglückszahlen().contains(randomInt)){
+                zweiAusZehn.add(randomInt);
+            }
+        }
+
     }
 
     @Override

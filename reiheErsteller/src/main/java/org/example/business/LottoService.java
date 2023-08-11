@@ -12,6 +12,7 @@ public class LottoService implements LottoserviceInterface {
     private Eurojackpot eurojackpot;
     private Lotto6Aus49 lotto6Aus49;
 
+
     public LottoService() {
         setRunning(true);
     }
@@ -41,19 +42,16 @@ public class LottoService implements LottoserviceInterface {
     }
 
     @Override
-    public Lotto6Aus49 lotto6Aus49Erstellen() {
-        return null;
+    public void lotto6Aus49Erstellen() {
+         ;
     }
 
     @Override
-    public Eurojackpot eurojackpotErstellen() {
-        return null;
+    public void eurojackpotErstellen() {
+         ;
     }
 
-    @Override
-    public void unglückszahlenBearbeiten() {
 
-    }
 
     @Override
     public HashSet<Integer> unglückszahlenErstellen(LottoTyp lottoTyp, String input) throws InvalidInputExeption {
@@ -116,7 +114,23 @@ public class LottoService implements LottoserviceInterface {
         }
         return new HashSet<>();
     }
+    @Override
+    public void unglückszahlenBearbeiten() {
+        System.out.println("Du hast Unglückszahlenbearbeitung gewählt");
+        System.out.println("Nimm bitte eine Auswahl");
 
+    }
+    public void information() {
+        System.out.println("Du hast Info gewählt");
+        System.out.println("Schreib bitte die Zahl der Auswahl wie: '1'");
+        System.out.println("oder gib einfache Wörter wie: eurojackpot, abschließen, 6aus49 oder information.");
+        System.out.println("1. 6aus49 Reihe: Gib eine Lottoreihe für 6aus49.");
+        System.out.println("2. Eurojackpot Reihe: Gib eine Lottoreihe für Eurojackpot mit 5aus50 plus 2aus10.");
+        System.out.println("3. Unglückszahlen bearbeiten: Hier kann man bis 6 Unglückszahlen eingeben und speichern.");
+        System.out.println("4. Information: Man bekommt wichtige information hier. Du befindest dich gerade in dieser Auswahl.");
+        System.out.println("5. Program abschließen: Hier kann man das Program abschließen.");
+        System.out.println();
+    }
     @Override
     public void abschließen() {
 
@@ -136,21 +150,25 @@ public class LottoService implements LottoserviceInterface {
             System.out.println("1. 6aus49 Reihe.");
             System.out.println("2. Eurojackpot Reihe.");
             System.out.println("3. Unglückszahlen bearbeiten.");
-            System.out.println("4. Program abschließen.");
+            System.out.println("4. Information");
+            System.out.println("5. Program abschließen.");
             System.out.println("Gib bitte deine Auswahl ein:");
 
             String input = scanner.nextLine();
 
             switch (input) {
                 case "1", "6aus49" -> lotto6Aus49Erstellen();
-                case "2", "Eurojackpot" -> eurojackpotErstellen();
-                case "3", "Unglückszahlen" -> unglückszahlenBearbeiten();
-                case "4", "Abschließen" -> abschließen();
-                default -> System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
+                case "2", "eurojackpot" -> eurojackpotErstellen();
+                case "3", "unglückszahlen" -> unglückszahlenBearbeiten();
+                case "4", "information"-> information();
+                case "5", "abschließen" -> abschließen();
+                default -> {
+                    System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
+                    information();
+                }
             }
         }
 
     }
-
 
 }
