@@ -1,4 +1,4 @@
-package org.example.business;
+package org.example.business.information;
 
 public interface InformationServiceInterface {
     public void information();

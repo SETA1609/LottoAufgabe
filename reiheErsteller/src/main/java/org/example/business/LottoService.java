@@ -1,5 +1,7 @@
 package org.example.business;
 
+import org.example.business.information.InformationService;
+import org.example.business.information.InformationServiceInterface;
 import org.example.dao.*;
 import org.example.exeptions.*;
 

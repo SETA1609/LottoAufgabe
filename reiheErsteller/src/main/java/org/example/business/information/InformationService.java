@@ -1,6 +1,6 @@
-package org.example.business;
+package org.example.business.information;
 
-public class InformationService implements InformationServiceInterface{
+public class InformationService implements InformationServiceInterface {
     @Override
     public void information() {
         System.out.println("Hier gibts wichtige informationen");

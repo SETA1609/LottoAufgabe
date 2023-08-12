@@ -1,4 +1,4 @@
-package org.example.business;
+package org.example.business.logging;
 
 public interface LogServiceInterface {
 }
