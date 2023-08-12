@@ -7,7 +7,6 @@ import java.util.*;
 
 public class LottoService implements LottoserviceInterface {
 
-
     private boolean isRunning;
     private Eurojackpot eurojackpot;
     private Lotto6Aus49 lotto6Aus49;
@@ -15,6 +14,7 @@ public class LottoService implements LottoserviceInterface {
 
     public LottoService() {
         setRunning(true);
+        unglückszahlen = new HashSet<>();
     }
 
     public boolean isRunning() {
@@ -159,6 +159,7 @@ public class LottoService implements LottoserviceInterface {
                 }
                 default -> {
                     System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
+                    informationUnglückszahlen();
                 }
             }
 
@@ -169,6 +170,18 @@ public class LottoService implements LottoserviceInterface {
     }
 
     private void informationUnglückszahlen() {
+        System.out.println("Hier gibts wichtige informationen");
+        System.out.println();
+        System.out.println("Schreib bitte die Zahl der Auswahl wie: '1'");
+        System.out.println("oder gib einfache Wörter wie: reihe, löschen, einzeln oder information.");
+        System.out.println(;
+        System.out.println("1. unglückszahlen eingeben(Reihe): Hier kann man bis 6 Zahlen in folgenden Format.");
+        System.out.println("1 5 8 9 4 16 oder 1-2-4-5-6-8");
+        System.out.println("2. Unglückszahlen löschen: Hier kann man die aktuellen Unglückszahlen löschen.");
+        System.out.println("3. unglückszahlen eingeben(Einzeln): Hier kann man einzelne Unglückszahlen eingeben.");
+        System.out.println("4. Information");
+        System.out.println("5. Zurück.");
+        System.out.println();
     }
 
     public void information() {
