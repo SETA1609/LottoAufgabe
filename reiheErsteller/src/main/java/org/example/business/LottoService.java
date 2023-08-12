@@ -11,10 +11,12 @@ public class LottoService implements LottoserviceInterface {
     private Eurojackpot eurojackpot;
     private Lotto6Aus49 lotto6Aus49;
     private HashSet<Integer> unglückszahlen;
+    private final InformationServiceInterface informationCodex;
 
     public LottoService() {
         setRunning(true);
         unglückszahlen = new HashSet<>();
+        informationCodex = new InformationService();
     }
 
     public boolean isRunning() {
@@ -121,13 +123,30 @@ public class LottoService implements LottoserviceInterface {
 
     @Override
     public void deleteUnglückszahl() {
-        Scanner scanner = new Scanner(System.in);
-        int input = scanner.nextInt();
-        try {
-            unglückszahlen.remove(input);
-        } catch (Exception e) {
 
+        while (true){
+            System.out.println("Hier kann man einzelne oder alle Unglückszahlen");
+            System.out.println();
+            System.out.println("1. Alle Zahlen löschen.");
+            System.out.println("2. Nur ein einzeln Zahl löschen.");
+            System.out.println("3. Zurück.");
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine();
+            switch (input){
+                    case "1","alle"->unglückszahlen.clear();
+                    case "2","einzeln"->{
+
+                    }
+                    case "3","zurück"->{
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
+
+                    }
+            }
         }
+
     }
     //Als Lottospieler möchte ich bis zu sechs Unglückszahlen eingeben, die bei der Generierung der Tippreihe ausgeschlossen werden. Akzeptanz-Kriterien:
     // o Die Übergabe der Unglückszahlen erfolgt als Aufrufparameter
@@ -153,14 +172,13 @@ public class LottoService implements LottoserviceInterface {
                 case "1", "reihe" -> unglückszahlenErstellen();
                 case "2", "löschen" -> deleteUnglückszahl();
                 case "3", "einzeln" -> addUnglückszahl();
-                case "4", "information"-> informationUnglückszahlen();
+                case "4", "information"-> informationCodex.informationUnglückszahlen();
                 case "5", "zurück" -> {
                     return;
                 }
                 default -> {
                     System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
-                    informationUnglückszahlen();
-                }
+                    informationCodex.informationUnglückszahlen();                }
             }
 
         }
@@ -169,33 +187,6 @@ public class LottoService implements LottoserviceInterface {
 
     }
 
-    private void informationUnglückszahlen() {
-        System.out.println("Hier gibts wichtige informationen");
-        System.out.println();
-        System.out.println("Schreib bitte die Zahl der Auswahl wie: '1'");
-        System.out.println("oder gib einfache Wörter wie: reihe, löschen, einzeln oder information.");
-        System.out.println(;
-        System.out.println("1. unglückszahlen eingeben(Reihe): Hier kann man bis 6 Zahlen in folgenden Format.");
-        System.out.println("1 5 8 9 4 16 oder 1-2-4-5-6-8");
-        System.out.println("2. Unglückszahlen löschen: Hier kann man die aktuellen Unglückszahlen löschen.");
-        System.out.println("3. unglückszahlen eingeben(Einzeln): Hier kann man einzelne Unglückszahlen eingeben.");
-        System.out.println("4. Information");
-        System.out.println("5. Zurück.");
-        System.out.println();
-    }
-
-    public void information() {
-        System.out.println("Hier gibts wichtige informationen");
-        System.out.println();
-        System.out.println("Schreib bitte die Zahl der Auswahl wie: '1'");
-        System.out.println("oder gib einfache Wörter wie: eurojackpot, abschließen, 6aus49 oder information.");
-        System.out.println("1. 6aus49 Reihe: Gib eine Lottoreihe für 6aus49.");
-        System.out.println("2. Eurojackpot Reihe: Gib eine Lottoreihe für Eurojackpot mit 5aus50 plus 2aus10.");
-        System.out.println("3. Unglückszahlen bearbeiten: Hier kann man bis 6 Unglückszahlen eingeben und speichern.");
-        System.out.println("4. Information: Man bekommt wichtige information hier. Du befindest dich gerade in dieser Auswahl.");
-        System.out.println("5. Program abschließen: Hier kann man das Program abschließen.");
-        System.out.println();
-    }
     @Override
     public void abschließen() {
 
@@ -225,12 +216,11 @@ public class LottoService implements LottoserviceInterface {
                 case "1", "6aus49" -> lotto6Aus49Erstellen();
                 case "2", "eurojackpot" -> eurojackpotErstellen();
                 case "3", "unglückszahlen" -> unglückszahlenBearbeiten();
-                case "4", "information"-> information();
+                case "4", "information"-> informationCodex.information();
                 case "5", "abschließen" -> abschließen();
                 default -> {
                     System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
-                    information();
-                }
+                    informationCodex.information();                }
             }
         }
 

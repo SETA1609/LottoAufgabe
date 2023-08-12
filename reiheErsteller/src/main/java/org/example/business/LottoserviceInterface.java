@@ -9,7 +9,6 @@ public interface LottoserviceInterface {
     public void unglückszahlenErstellen() throws InvalidInputExeption;
     public void addUnglückszahl();
     public void deleteUnglückszahl();
-    public void information();
     public void abschließen();
     public void starten() throws InvalidInputExeption;
 
