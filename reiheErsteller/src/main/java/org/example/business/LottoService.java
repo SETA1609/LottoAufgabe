@@ -1,10 +1,8 @@
 package org.example.business;
 
-import org.example.business.information.InformationService;
-import org.example.business.information.InformationServiceInterface;
-import org.example.business.unglückszahlen.UnglücksZahlenService;
-import org.example.business.unglückszahlen.UnglückszahlenServiceInterface;
-import org.example.dao.*;
+import org.example.business.information.*;
+import org.example.business.tippreihe.*;
+import org.example.business.unglückszahlen.*;
 import org.example.exeptions.*;
 
 import java.util.*;
@@ -12,54 +10,24 @@ import java.util.*;
 public class LottoService implements LottoserviceInterface {
 
     private boolean isRunning;
-    private Eurojackpot eurojackpot;
-    private Lotto6Aus49 lotto6Aus49;
-    private HashSet<Integer> unglückszahlen;
     private final InformationServiceInterface informationCodex;
-    private UnglückszahlenServiceInterface unglückszahlenService;
+    private final UnglückszahlenServiceInterface unglückszahlenService;
+    private final TippreiheServiceInterface tippreiheService;
 
     public LottoService() {
         setRunning(true);
-        unglückszahlen = new HashSet<>();
         informationCodex = new InformationService();
         unglückszahlenService = new UnglücksZahlenService();
+        tippreiheService= new TippreiheService();
     }
 
-    public boolean isRunning() {
+    public boolean getIsRunning() {
         return isRunning;
     }
 
     public void setRunning(boolean running) {
         isRunning = running;
     }
-
-    public Eurojackpot getEurojackpot() {
-        return eurojackpot;
-    }
-
-    public void setEurojackpot(Eurojackpot eurojackpot) {
-        this.eurojackpot = eurojackpot;
-    }
-
-    public Lotto6Aus49 getLotto6Aus49() {
-        return lotto6Aus49;
-    }
-
-    public void setLotto6Aus49(Lotto6Aus49 lotto6Aus49) {
-        this.lotto6Aus49 = lotto6Aus49;
-    }
-
-    @Override
-    public void lotto6Aus49Erstellen() {
-         ;
-    }
-
-    @Override
-    public void eurojackpotErstellen() {
-         ;
-    }
-
-
 
     @Override
     public void abschließen() {
@@ -87,8 +55,8 @@ public class LottoService implements LottoserviceInterface {
             String input = scanner.nextLine();
 
             switch (input) {
-                case "1", "6aus49" -> lotto6Aus49Erstellen();
-                case "2", "eurojackpot" -> eurojackpotErstellen();
+                case "1", "6aus49" -> tippreiheService.lotto6Aus49Erstellen(unglückszahlenService.getUnglückszahlen());
+                case "2", "eurojackpot" -> tippreiheService.eurojackpotErstellen(unglückszahlenService.getUnglückszahlen());
                 case "3", "unglückszahlen" -> unglückszahlenService.unglückszahlenBearbeiten();
                 case "4", "information"-> informationCodex.information();
                 case "5", "abschließen" -> abschließen();

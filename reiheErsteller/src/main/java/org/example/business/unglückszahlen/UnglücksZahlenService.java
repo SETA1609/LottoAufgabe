@@ -62,7 +62,7 @@ private final InformationServiceInterface informationCodex;
         for (String unglückszahl : splitInput) {
             try {
                 int tmp= Integer.parseInt(unglückszahl);
-                if (tmp<max&&tmp>0){
+                if (tmp<=max&&tmp>0){
                     unglückszahlen.add(Integer.parseInt(unglückszahl));
                 }else {
                     System.out.println("diese Zahl: "+ unglückszahl + " ist außer des Lottotyps");
