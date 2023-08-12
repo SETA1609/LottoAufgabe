@@ -56,16 +56,14 @@ public class LottoService implements LottoserviceInterface {
     }
 
 
-
     @Override
     public void unglückszahlenErstellen() throws InvalidInputExeption {
         Scanner scanner = new Scanner(System.in);
-        HashSet<Integer> unglückszahlen = new HashSet<>();
-        int max;
-        String[] splitInput;
+        unglückszahlen.clear();
+        String[] splitInput = new String[6];
         System.out.println("Wähl ein Lotto: 6aus49 oder Eurojackpot");
         String input= scanner.nextLine();
-        LottoTyp typ;
+        LottoTyp typ=LottoTyp.LOTTO6AUS49;
         switch (input){
             case "6aus49"->typ=LottoTyp.LOTTO6AUS49;
             case "eurojackpot","Eurojackpot"->typ=LottoTyp.EUROJACKPOT;
@@ -76,15 +74,17 @@ public class LottoService implements LottoserviceInterface {
         }
         System.out.println("Gib bitte deine Reihe:");
         String reihe = scanner.nextLine();
+        int max= typ==LottoTyp.LOTTO6AUS49?49:50;
 
 
 
         try {
-            splitInput = reihe.split(" ");
+            if (reihe.contains(" ")){
+                splitInput = reihe.split(" ");
+            }
 
-            if (splitInput.length > 6) {
-                //throw new UnglückszahlenVollExeption("Du hast mehr als 6 Zahlen eingegeben");
-                starten();
+            if (reihe.contains("-")){
+                splitInput = reihe.split("-");
             }
 
         } catch (Exception e) {
@@ -95,7 +95,12 @@ public class LottoService implements LottoserviceInterface {
 
         for (String unglückszahl : splitInput) {
             try {
-                unglückszahlen.add(Integer.parseInt(unglückszahl));
+                int tmp= Integer.parseInt(unglückszahl);
+                if (tmp<max&&tmp>0){
+                    unglückszahlen.add(Integer.parseInt(unglückszahl));
+                }else {
+                    System.out.println("diese Zahl: "+ unglückszahl + " ist außer des Lottotyps");
+                }
             } catch (Exception e) {
 
             }
@@ -105,8 +110,8 @@ public class LottoService implements LottoserviceInterface {
 
     @Override
     public void addUnglückszahl() {
-
-        if (unglückszahlen.size()<6){
+        boolean anzahlIstVoll=unglückszahlen.size()<6;
+        if(anzahlIstVoll){
             Scanner scanner = new Scanner(System.in);
             System.out.println("Gib die Zahl, die hinzugefügt wird");
             String scannerInput = scanner.nextLine();
@@ -136,20 +141,29 @@ public class LottoService implements LottoserviceInterface {
             String input = scanner.nextLine();
             switch (input){
                     case "1","alle"->unglückszahlen.clear();
-                    case "2","einzeln"->{
-
-                    }
+                    case "2","einzeln"-> deleteEinzelzahl();
                     case "3","zurück"->{
                         return;
                     }
                     default -> {
                         System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
-
                     }
             }
         }
 
     }
+
+    private void deleteEinzelzahl() {
+        System.out.println("Gib bitte eine einzel Zahl");
+        Scanner scanner= new Scanner(System.in);
+        Integer input= scanner.nextInt();
+        if (!unglückszahlen.contains(input)){
+            System.out.println("Diese Zahl ist nicht in deine Unglückszahlen");
+        }else {
+            unglückszahlen.remove(input);
+        }
+    }
+
     //Als Lottospieler möchte ich bis zu sechs Unglückszahlen eingeben, die bei der Generierung der Tippreihe ausgeschlossen werden. Akzeptanz-Kriterien:
     // o Die Übergabe der Unglückszahlen erfolgt als Aufrufparameter
     // o Die eingegeben Unglückszahlen werden geprüft, ob sie innerhalb der Grenzen des gültigen Zahlenraums liegen.
@@ -168,6 +182,8 @@ public class LottoService implements LottoserviceInterface {
             System.out.println("3. unglückszahlen eingeben(Einzeln).");
             System.out.println("4. Information");
             System.out.println("5. Zurück.");
+            System.out.println();
+            System.out.println("Hier sind deine aktuelle Unglückszahlen:" + unglückszahlen.toString());
             String input = scanner.nextLine();
             System.out.println();
             switch (input){
