@@ -2,6 +2,8 @@ package org.example.business;
 
 import org.example.business.information.InformationService;
 import org.example.business.information.InformationServiceInterface;
+import org.example.business.unglückszahlen.UnglücksZahlenService;
+import org.example.business.unglückszahlen.UnglückszahlenServiceInterface;
 import org.example.dao.*;
 import org.example.exeptions.*;
 
@@ -14,11 +16,13 @@ public class LottoService implements LottoserviceInterface {
     private Lotto6Aus49 lotto6Aus49;
     private HashSet<Integer> unglückszahlen;
     private final InformationServiceInterface informationCodex;
+    private UnglückszahlenServiceInterface unglückszahlenService;
 
     public LottoService() {
         setRunning(true);
         unglückszahlen = new HashSet<>();
         informationCodex = new InformationService();
+        unglückszahlenService = new UnglücksZahlenService();
     }
 
     public boolean isRunning() {
@@ -56,154 +60,6 @@ public class LottoService implements LottoserviceInterface {
     }
 
 
-    @Override
-    public void unglückszahlenErstellen() throws InvalidInputExeption {
-        Scanner scanner = new Scanner(System.in);
-        unglückszahlen.clear();
-        String[] splitInput = new String[6];
-        System.out.println("Wähl ein Lotto: 6aus49 oder Eurojackpot");
-        String input= scanner.nextLine();
-        LottoTyp typ=LottoTyp.LOTTO6AUS49;
-        switch (input){
-            case "6aus49"->typ=LottoTyp.LOTTO6AUS49;
-            case "eurojackpot","Eurojackpot"->typ=LottoTyp.EUROJACKPOT;
-            default -> {
-                System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
-                unglückszahlenErstellen();
-            }
-        }
-        System.out.println("Gib bitte deine Reihe:");
-        String reihe = scanner.nextLine();
-        int max= typ==LottoTyp.LOTTO6AUS49?49:50;
-
-
-
-        try {
-            if (reihe.contains(" ")){
-                splitInput = reihe.split(" ");
-            }
-
-            if (reihe.contains("-")){
-                splitInput = reihe.split("-");
-            }
-
-        } catch (Exception e) {
-            throw new InvalidInputExeption("Gibt deine Unglückszahlen mit eine leerzeichen. zB: 15 4 8 2. Max 6 Zahlen");
-        }
-
-
-
-        for (String unglückszahl : splitInput) {
-            try {
-                int tmp= Integer.parseInt(unglückszahl);
-                if (tmp<max&&tmp>0){
-                    unglückszahlen.add(Integer.parseInt(unglückszahl));
-                }else {
-                    System.out.println("diese Zahl: "+ unglückszahl + " ist außer des Lottotyps");
-                }
-            } catch (Exception e) {
-
-            }
-
-        }
-    }
-
-    @Override
-    public void addUnglückszahl() {
-        boolean anzahlIstVoll=unglückszahlen.size()<6;
-        if(anzahlIstVoll){
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Gib die Zahl, die hinzugefügt wird");
-            String scannerInput = scanner.nextLine();
-
-            Integer input= Integer.parseInt(scannerInput);
-            if (!unglückszahlen.contains(input)){
-                unglückszahlen.add(input);
-            }else {
-                System.out.println("Du hast eine Unglückszahl eingegeben, die schon eingegeben würde oder ein falsches input");
-            }
-        }else {
-            System.out.println("Du hast schon 6 Unglückszahlen eingetragen. Bitte löscht deine Unglückszahlen, um neuen einzutragen");
-        }
-
-    }
-
-    @Override
-    public void deleteUnglückszahl() {
-
-        while (true){
-            System.out.println("Hier kann man einzelne oder alle Unglückszahlen");
-            System.out.println();
-            System.out.println("1. Alle Zahlen löschen.");
-            System.out.println("2. Nur ein einzeln Zahl löschen.");
-            System.out.println("3. Zurück.");
-            Scanner scanner = new Scanner(System.in);
-            String input = scanner.nextLine();
-            switch (input){
-                    case "1","alle"->unglückszahlen.clear();
-                    case "2","einzeln"-> deleteEinzelzahl();
-                    case "3","zurück"->{
-                        return;
-                    }
-                    default -> {
-                        System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
-                    }
-            }
-        }
-
-    }
-
-    private void deleteEinzelzahl() {
-        System.out.println("Gib bitte eine einzel Zahl");
-        Scanner scanner= new Scanner(System.in);
-        Integer input= scanner.nextInt();
-        if (!unglückszahlen.contains(input)){
-            System.out.println("Diese Zahl ist nicht in deine Unglückszahlen");
-        }else {
-            unglückszahlen.remove(input);
-        }
-    }
-
-    //Als Lottospieler möchte ich bis zu sechs Unglückszahlen eingeben, die bei der Generierung der Tippreihe ausgeschlossen werden. Akzeptanz-Kriterien:
-    // o Die Übergabe der Unglückszahlen erfolgt als Aufrufparameter
-    // o Die eingegeben Unglückszahlen werden geprüft, ob sie innerhalb der Grenzen des gültigen Zahlenraums liegen.
-    // o Sollte eine ungültige Unglückszahl angegeben werden, erfolgt die Ausgabe einer Fehlermeldung. Diese Fehlermeldung soll den gültigen Zahlenraum angeben.
-    // o Die Unglückszahlen werden gespeichert, so dass diese auch bei der nächsten Verwendung (nach schließen der Applikation) berücksichtigt werden können.
-    // o Die Unglückszahlen werden unabhängig von der Lotterie berücksichtigt
-    @Override
-    public void unglückszahlenBearbeiten() throws InvalidInputExeption {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Du hast Unglückszahlenbearbeitung gewählt");
-        while (true){
-            System.out.println("Nimm bitte eine Auswahl");
-            System.out.println("1. unglückszahlen eingeben(Reihe).");
-            System.out.println("2. Unglückszahlen löschen");
-            System.out.println("3. unglückszahlen eingeben(Einzeln).");
-            System.out.println("4. Information");
-            System.out.println("5. Zurück.");
-            System.out.println();
-            System.out.println("Hier sind deine aktuelle Unglückszahlen:" + unglückszahlen.toString());
-            String input = scanner.nextLine();
-            System.out.println();
-            switch (input){
-                case "1", "reihe" -> unglückszahlenErstellen();
-                case "2", "löschen" -> deleteUnglückszahl();
-                case "3", "einzeln" -> addUnglückszahl();
-                case "4", "information"-> informationCodex.informationUnglückszahlen();
-                case "5", "zurück" -> {
-                    return;
-                }
-                default -> {
-                    System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
-                    informationCodex.informationUnglückszahlen();                }
-            }
-
-        }
-
-
-
-    }
 
     @Override
     public void abschließen() {
@@ -233,7 +89,7 @@ public class LottoService implements LottoserviceInterface {
             switch (input) {
                 case "1", "6aus49" -> lotto6Aus49Erstellen();
                 case "2", "eurojackpot" -> eurojackpotErstellen();
-                case "3", "unglückszahlen" -> unglückszahlenBearbeiten();
+                case "3", "unglückszahlen" -> unglückszahlenService.unglückszahlenBearbeiten();
                 case "4", "information"-> informationCodex.information();
                 case "5", "abschließen" -> abschließen();
                 default -> {
