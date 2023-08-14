@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashSet;
 
@@ -21,7 +22,7 @@ class TippreiheServiceTest {
     }
 
     @Test
-    void testLotto6Aus49Erstellen() {
+    void testLotto6Aus49Erstellen() throws IOException {
         TippreiheService tippreiheService = new TippreiheService();
 
         tippreiheService.lotto6Aus49Erstellen(new HashSet<>());
@@ -31,7 +32,7 @@ class TippreiheServiceTest {
     }
 
     @Test
-    void testEurojackpotErstellen() {
+    void testEurojackpotErstellen() throws IOException {
         TippreiheService tippreiheService = new TippreiheService();
 
         tippreiheService.eurojackpotErstellen(new HashSet<>());

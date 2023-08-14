@@ -39,10 +39,9 @@ Das Programm bietet dem Benutzer verschiedene Optionen:
 
 ## Logging
 
-Das Programm verwendet das `LogService`-Modul, um Protokollnachrichten zu erstellen. Es werden verschiedene Protokollierungsstufen verwendet:
+Das Programm verwendet das `LogService`-Modul, um Protokollnachrichten zu erstellen. Es werden 2 Protokollwährungsstufen verwendet:
 
 - `info`: Allgemeine Informationen über den Programmablauf.
-- `warning`: Warnungen und Hinweise.
 - `error`: Fehlermeldungen und Ausnahmen.
 
 Die Protokolldatei wird unter `reiheErsteller/resources/logs/LottoLogs.txt` gespeichert.

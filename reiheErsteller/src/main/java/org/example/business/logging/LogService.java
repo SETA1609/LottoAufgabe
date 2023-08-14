@@ -31,10 +31,7 @@ public class LogService implements LogServiceInterface{
         lgr.log(Level.INFO, message);
     }
 
-    @Override
-    public void warning(String message) {
-        lgr.log(Level.WARNING, message);
-    }
+
 
     @Override
     public void error(String message) {

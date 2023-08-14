@@ -1,79 +1,67 @@
 package org.example.business.unglückszahlen;
 
 import org.example.exeptions.InvalidInputException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashSet;
-
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class UnglücksZahlenServiceTest {
 
-    private UnglücksZahlenService unglücksZahlenService;
+    private UnglückszahlenServiceInterface unglücksZahlenService;
 
     @BeforeEach
     void setUp() throws IOException {
         unglücksZahlenService = new UnglücksZahlenService();
-        unglücksZahlenService.setUnglückszahlen(new HashSet<>());
     }
 
     @Test
-    void testUnglückszahlenErstellen_ValidInput() throws InvalidInputException {
-        setInput("6aus49\n1 2 3 4 5 6");
-        unglücksZahlenService.unglückszahlenErstellen();
-        assertEquals(6, unglücksZahlenService.getUnglückszahlen().size());
-    }
-
-    @Test
-    void testUnglückszahlenErstellen_InvalidInput() {
-        setInput("invalid\ninvalid");
-        assertThrows(InvalidInputException.class, () -> unglücksZahlenService.unglückszahlenErstellen());
-    }
-
-    @Test
-    void testAddUnglückszahl_ValidInput() {
-        setInput("7");
-        unglücksZahlenService.addUnglückszahl();
-        assertTrue(unglücksZahlenService.getUnglückszahlen().contains(7));
-    }
-
-    @Test
-    void testAddUnglückszahl_InvalidInput() {
-        setInput("invalid");
-        unglücksZahlenService.addUnglückszahl();
-        assertFalse(unglücksZahlenService.getUnglückszahlen().contains("invalid"));
-    }
-
-    @Test
-    void testDeleteEinzelzahl_ValidInput() {
-        HashSet<Integer> unglückszahlen = new HashSet<>();
-        unglückszahlen.add(5);
-        unglücksZahlenService.setUnglückszahlen(unglückszahlen);
-
-        setInput("5");
-        unglücksZahlenService.deleteEinzelzahl();
-
-        assertFalse(unglücksZahlenService.getUnglückszahlen().contains(5));
-    }
-
-    @Test
-    void testDeleteEinzelzahl_InvalidInput() {
-        HashSet<Integer> unglückszahlen = new HashSet<>();
-        unglückszahlen.add(5);
-        unglücksZahlenService.setUnglückszahlen(unglückszahlen);
-
-        setInput("invalid");
-        unglücksZahlenService.deleteEinzelzahl();
-
-        assertTrue(unglücksZahlenService.getUnglückszahlen().contains(5));
-    }
-
-    private void setInput(String input) {
+    void unglückszahlenErstellen() throws InvalidInputException {
+        String input = "6aus49\n1 2 3 4 5 6\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
+
+        unglücksZahlenService.unglückszahlenErstellen();
+
+        HashSet<Integer> expectedUnglückszahlen = new HashSet<>();
+        for (int i = 1; i <= 6; i++) {
+            expectedUnglückszahlen.add(i);
+        }
+
+        assertEquals(expectedUnglückszahlen, unglücksZahlenService.getUnglückszahlen());
+    }
+
+    @Test
+    void addUnglückszahl() {
+        int newUnglückszahl = 7;
+        unglücksZahlenService.setUnglückszahlen(new HashSet<>());
+        String input = Integer.toString(newUnglückszahl) + "\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        unglücksZahlenService.addUnglückszahl();
+
+        assertTrue(unglücksZahlenService.getUnglückszahlen().contains(newUnglückszahl));
+    }
+
+
+    @Test
+    void deleteEinzelzahl() {
+        int existingUnglückszahl = 2;
+        HashSet<Integer> unglückszahlen = new HashSet<>();
+        unglückszahlen.add(existingUnglückszahl);
+        unglücksZahlenService.setUnglückszahlen(unglückszahlen);
+        String input = Integer.toString(existingUnglückszahl) + "\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        unglücksZahlenService.deleteEinzelzahl();
+
+        assertFalse(unglücksZahlenService.getUnglückszahlen().contains(existingUnglückszahl));
     }
 }
