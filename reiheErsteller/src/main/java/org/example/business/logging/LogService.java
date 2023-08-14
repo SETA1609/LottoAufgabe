@@ -9,7 +9,6 @@ public class LogService implements LogServiceInterface{
     private FileHandler fh;
 
     public LogService(Class<?> currentClass) throws IOException {
-       // System.out.println("Initializing logger for class: " + currentClass.getName());
         this.lgr = Logger.getLogger(currentClass.getName());
         LogManager.getLogManager().reset();
         lgr.setLevel(Level.ALL);
