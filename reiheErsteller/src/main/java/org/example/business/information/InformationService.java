@@ -1,6 +1,18 @@
 package org.example.business.information;
 
+import org.example.business.LottoService;
+import org.example.business.logging.LogService;
+import org.example.business.logging.LogServiceInterface;
+
+import java.io.IOException;
+
 public class InformationService implements InformationServiceInterface {
+    private LogServiceInterface lgr;
+
+    public InformationService() throws IOException {
+        lgr= new LogService(LottoService.class);
+    }
+
     @Override
     public void information() {
         System.out.println("Hier gibts wichtige informationen");
@@ -31,8 +43,4 @@ public class InformationService implements InformationServiceInterface {
         System.out.println();
     }
 
-    @Override
-    public void informationTippreiheErstellen() {
-
-    }
 }

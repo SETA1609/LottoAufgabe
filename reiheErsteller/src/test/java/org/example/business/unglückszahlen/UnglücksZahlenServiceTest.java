@@ -1,9 +1,10 @@
 package org.example.business.unglückszahlen;
 
-import org.example.exeptions.InvalidInputExeption;
+import org.example.exeptions.InvalidInputException;
 import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 
@@ -15,13 +16,13 @@ class UnglücksZahlenServiceTest {
     private UnglücksZahlenService unglücksZahlenService;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         unglücksZahlenService = new UnglücksZahlenService();
         unglücksZahlenService.setUnglückszahlen(new HashSet<>());
     }
 
     @Test
-    void testUnglückszahlenErstellen_ValidInput() throws InvalidInputExeption {
+    void testUnglückszahlenErstellen_ValidInput() throws InvalidInputException {
         setInput("6aus49\n1 2 3 4 5 6");
         unglücksZahlenService.unglückszahlenErstellen();
         assertEquals(6, unglücksZahlenService.getUnglückszahlen().size());
@@ -30,7 +31,7 @@ class UnglücksZahlenServiceTest {
     @Test
     void testUnglückszahlenErstellen_InvalidInput() {
         setInput("invalid\ninvalid");
-        assertThrows(InvalidInputExeption.class, () -> unglücksZahlenService.unglückszahlenErstellen());
+        assertThrows(InvalidInputException.class, () -> unglücksZahlenService.unglückszahlenErstellen());
     }
 
     @Test

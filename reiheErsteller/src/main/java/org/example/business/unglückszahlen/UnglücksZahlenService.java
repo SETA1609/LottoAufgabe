@@ -1,18 +1,24 @@
 package org.example.business.unglückszahlen;
 
+import org.example.business.LottoService;
 import org.example.business.information.InformationService;
 import org.example.business.information.InformationServiceInterface;
+import org.example.business.logging.LogService;
+import org.example.business.logging.LogServiceInterface;
 import org.example.dao.LottoTyp;
-import org.example.exeptions.InvalidInputExeption;
+import org.example.exeptions.InvalidInputException;
 
+import java.io.IOException;
 import java.util.*;
 
 public class UnglücksZahlenService implements UnglückszahlenServiceInterface{
+    private LogServiceInterface lgr;
     private HashSet<Integer> unglückszahlen;
 private final InformationServiceInterface informationCodex;
-    public UnglücksZahlenService() {
+    public UnglücksZahlenService() throws IOException {
         unglückszahlen=new HashSet<>();
         informationCodex=new InformationService();
+        lgr= new LogService(UnglücksZahlenService.class);
     }
 
     public HashSet<Integer> getUnglückszahlen() {
@@ -23,16 +29,16 @@ private final InformationServiceInterface informationCodex;
         this.unglückszahlen = unglückszahlen;
     }
 
-    public void unglückszahlenErstellen() throws InvalidInputExeption {
+    public void unglückszahlenErstellen() throws InvalidInputException {
         Scanner scanner = new Scanner(System.in);
         unglückszahlen.clear();
         String[] splitInput = new String[6];
         System.out.println("Wähl ein Lotto: 6aus49 oder Eurojackpot");
-        String input= scanner.nextLine();
-        LottoTyp typ=LottoTyp.LOTTO6AUS49;
-        switch (input){
-            case "6aus49"->typ=LottoTyp.LOTTO6AUS49;
-            case "eurojackpot","Eurojackpot"->typ=LottoTyp.EUROJACKPOT;
+        String input = scanner.nextLine();
+        LottoTyp typ = LottoTyp.LOTTO6AUS49;
+        switch (input) {
+            case "6aus49" -> typ = LottoTyp.LOTTO6AUS49;
+            case "eurojackpot", "Eurojackpot" -> typ = LottoTyp.EUROJACKPOT;
             default -> {
                 System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
                 unglückszahlenErstellen();
@@ -40,37 +46,32 @@ private final InformationServiceInterface informationCodex;
         }
         System.out.println("Gib bitte deine Reihe:");
         String reihe = scanner.nextLine();
-        int max= typ==LottoTyp.LOTTO6AUS49?49:50;
-
-
+        int max = typ == LottoTyp.LOTTO6AUS49 ? 49 : 50;
 
         try {
-            if (reihe.contains(" ")){
+            if (reihe.contains(" ")) {
                 splitInput = reihe.split(" ");
-            }
-
-            if (reihe.contains("-")){
+            } else if (reihe.contains("-")) {
                 splitInput = reihe.split("-");
+            } else {
+                throw new InvalidInputException("Ungültiges Eingabeformat. Erwarte Leerzeichen oder Bindestrich.");
             }
-
-        } catch (Exception e) {
-            throw new InvalidInputExeption("Gibt deine Unglückszahlen mit eine leerzeichen. zB: 15 4 8 2. Max 6 Zahlen");
+        } catch (InvalidInputException e) {
+            System.out.println(e.getMessage());
+            return;
         }
-
-
 
         for (String unglückszahl : splitInput) {
             try {
-                int tmp= Integer.parseInt(unglückszahl);
-                if (tmp<=max&&tmp>0){
+                int tmp = Integer.parseInt(unglückszahl);
+                if (tmp <= max && tmp > 0) {
                     unglückszahlen.add(Integer.parseInt(unglückszahl));
-                }else {
-                    System.out.println("diese Zahl: "+ unglückszahl + " ist außer des Lottotyps");
+                } else {
+                    lgr.error("Diese Zahl: " + unglückszahl + " ist außerhalb des Lottotyps");
                 }
-            } catch (Exception e) {
-
+            } catch (NumberFormatException e) {
+                lgr.info("Ungültige Zahl: " + unglückszahl);
             }
-
         }
     }
     public void addUnglückszahl() {
@@ -84,10 +85,10 @@ private final InformationServiceInterface informationCodex;
             if (!unglückszahlen.contains(input)){
                 unglückszahlen.add(input);
             }else {
-                System.out.println("Du hast eine Unglückszahl eingegeben, die schon eingegeben würde oder ein falsches input");
+                lgr.error("Du hast eine Unglückszahl eingegeben, die schon eingegeben würde oder ein falsches input");
             }
         }else {
-            System.out.println("Du hast schon 6 Unglückszahlen eingetragen. Bitte löscht deine Unglückszahlen, um neuen einzutragen");
+            lgr.error("Du hast schon 6 Unglückszahlen eingetragen. Bitte löscht deine Unglückszahlen, um neuen einzutragen");
         }
 
     }
@@ -109,7 +110,7 @@ private final InformationServiceInterface informationCodex;
                     return;
                 }
                 default -> {
-                    System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
+                    lgr.error("Ungültige Auswahl. Bitte versuche es erneut.");
                 }
             }
         }
@@ -126,7 +127,7 @@ private final InformationServiceInterface informationCodex;
             unglückszahlen.remove(input);
         }
     }
-    public void unglückszahlenBearbeiten() throws InvalidInputExeption {
+    public void unglückszahlenBearbeiten() throws InvalidInputException {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Du hast Unglückszahlenbearbeitung gewählt");
@@ -150,7 +151,7 @@ private final InformationServiceInterface informationCodex;
                     return;
                 }
                 default -> {
-                    System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
+                    lgr.error("Ungültige Auswahl. Bitte versuche es erneut.");
                     informationCodex.informationUnglückszahlen();                }
             }
 

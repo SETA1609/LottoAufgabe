@@ -26,9 +26,13 @@ public class Eurojackpot extends Tippreihe {
 
         int randomInt;
         while (zweiAusZehn.size()<=1){
-            randomInt= (int) (Math.random()*11);
-            if (!zweiAusZehn.contains(randomInt) && !super.getUnglückszahlen().contains(randomInt)&&randomInt!=0){
-                zweiAusZehn.add(randomInt);
+            try {
+                randomInt = (int) (Math.random() * 11);
+                if (!zweiAusZehn.contains(randomInt) && !super.getUnglückszahlen().contains(randomInt) && randomInt != 0) {
+                    zweiAusZehn.add(randomInt);
+                }
+            } catch (Exception e) {
+                // logging the exception
             }
         }
 

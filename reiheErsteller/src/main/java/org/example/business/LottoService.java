@@ -1,10 +1,13 @@
 package org.example.business;
 
 import org.example.business.information.*;
+import org.example.business.logging.LogService;
+import org.example.business.logging.LogServiceInterface;
 import org.example.business.tippreihe.*;
 import org.example.business.unglückszahlen.*;
 import org.example.exeptions.*;
 
+import java.io.IOException;
 import java.util.*;
 
 public class LottoService implements LottoserviceInterface {
@@ -13,12 +16,14 @@ public class LottoService implements LottoserviceInterface {
     private final InformationServiceInterface informationCodex;
     private final UnglückszahlenServiceInterface unglückszahlenService;
     private final TippreiheServiceInterface tippreiheService;
+    private LogServiceInterface lgr;
 
-    public LottoService() {
+    public LottoService() throws IOException {
         setRunning(true);
         informationCodex = new InformationService();
         unglückszahlenService = new UnglücksZahlenService();
         tippreiheService= new TippreiheService();
+        lgr= new LogService(LottoService.class);
     }
 
     public boolean getIsRunning() {
@@ -33,17 +38,19 @@ public class LottoService implements LottoserviceInterface {
     public void abschließen() {
 
         System.out.println("Danke für die Verwendung von Glücksspiel 3000");
+        lgr.info("Programm ist abgeschlossen");
         setRunning(false);
 
     }
 
     @Override
-    public void starten() throws InvalidInputExeption {
+    public void starten() throws InvalidInputException {
+        lgr.info("Program ist gestartet");
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Willkommen in Glücksspiel 3000");
 
-        while (isRunning) {
+        while (getIsRunning()) {
             System.out.println("Bitte wählt einer unsere optionen");
             System.out.println("1. 6aus49 Reihe.");
             System.out.println("2. Eurojackpot Reihe.");
@@ -62,6 +69,7 @@ public class LottoService implements LottoserviceInterface {
                 case "5", "abschließen" -> abschließen();
                 default -> {
                     System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
+                    lgr.info("Ungültige Auswahl. Bitte versuche es erneut.");
                     informationCodex.information();                }
             }
         }

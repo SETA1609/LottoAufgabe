@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class Tippreihe {
     private HashSet<Integer> unglückszahlen;
@@ -13,24 +14,38 @@ public class Tippreihe {
     public Tippreihe() {
         tippreihe = new HashSet<Integer>();
         setUnglückszahlen(new HashSet<Integer>());
-        setSuperzahl((int) (Math.random() * 10));
+        try {
+            setSuperzahl((int) (Math.random() * 10));
+        } catch (Exception e) {
+            setSuperzahl(0);
+        }
         setLottoTyp(LottoTyp.LOTTO6AUS49);
         setTippreihe();
         setSortierteReihe();
     }
+
     public Tippreihe(HashSet<Integer> unglückszahlen) {
         tippreihe = new HashSet<Integer>();
         setUnglückszahlen(unglückszahlen == null ? new HashSet<>() : unglückszahlen);
         setLottoTyp(LottoTyp.LOTTO6AUS49);
-        setSuperzahl((int) (Math.random() * 10));
+        try {
+            setSuperzahl((int) (Math.random() * 10));
+        } catch (Exception e) {
+            setSuperzahl(0);
+        }
         setTippreihe();
         setSortierteReihe();
     }
+
     public Tippreihe(HashSet<Integer> unglückszahlen, LottoTyp lottoTyp) {
         tippreihe = new HashSet<Integer>();
         setUnglückszahlen(unglückszahlen == null ? new HashSet<>() : unglückszahlen);
         setLottoTyp(lottoTyp);
-        setSuperzahl((int) (Math.random() * 10));
+        try {
+            setSuperzahl((int) (Math.random() * 10));
+        } catch (Exception e) {
+            setSuperzahl(0);
+        }
         setTippreihe();
         setSortierteReihe();
     }
@@ -53,21 +68,27 @@ public class Tippreihe {
         int randomInt;
         if (lottoTyp == LottoTyp.EUROJACKPOT) {
             while (tippreihe.size() < 5) {
-                randomInt = (int) (Math.random() * obereGrenze);
-                if (!tippreihe.contains(randomInt) && !unglückszahlen.contains(randomInt)&&randomInt!=0) {
-                    tippreihe.add(randomInt);
+                try {
+                    randomInt = (int) (Math.random() * obereGrenze);
+                    if (!tippreihe.contains(randomInt) && !unglückszahlen.contains(randomInt) && randomInt != 0) {
+                        tippreihe.add(randomInt);
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Hier soll ich die Zahl loggen
                 }
             }
         } else {
             while (tippreihe.size() < 6) {
-                randomInt = (int) (Math.random() * obereGrenze);
-                if (!tippreihe.contains(randomInt) && !unglückszahlen.contains(randomInt)&&randomInt!=0) {
-                    tippreihe.add(randomInt);
+                try {
+                    randomInt = (int) (Math.random() * obereGrenze);
+                    if (!tippreihe.contains(randomInt) && !unglückszahlen.contains(randomInt) && randomInt != 0) {
+                        tippreihe.add(randomInt);
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Hier soll ich die Zahl loggen
                 }
             }
         }
-
-
     }
 
     public int getSuperzahl() {

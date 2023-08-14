@@ -1,10 +1,20 @@
 package org.example.business.tippreihe;
 
+import org.example.business.LottoService;
+import org.example.business.logging.LogService;
+import org.example.business.logging.LogServiceInterface;
 import org.example.dao.*;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 public class TippreiheService implements TippreiheServiceInterface{
+    private LogServiceInterface lgr;
+
+    public TippreiheService() throws IOException {
+        lgr= new LogService(TippreiheService.class);
+    }
+
     @Override
     public void lotto6Aus49Erstellen(HashSet<Integer> unglückszahlen) {
 
