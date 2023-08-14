@@ -11,14 +11,15 @@ import org.example.exeptions.InvalidInputException;
 import java.io.IOException;
 import java.util.*;
 
-public class UnglücksZahlenService implements UnglückszahlenServiceInterface{
+public class UnglücksZahlenService implements UnglückszahlenServiceInterface {
     private LogServiceInterface lgr;
     private HashSet<Integer> unglückszahlen;
-private final InformationServiceInterface informationCodex;
+    private final InformationServiceInterface informationCodex;
+
     public UnglücksZahlenService() throws IOException {
-        unglückszahlen=new HashSet<>();
-        informationCodex=new InformationService();
-        lgr= new LogService(UnglücksZahlenService.class);
+        unglückszahlen = new HashSet<>();
+        informationCodex = new InformationService();
+        lgr = new LogService(LottoService.class);
     }
 
     public HashSet<Integer> getUnglückszahlen() {
@@ -30,6 +31,7 @@ private final InformationServiceInterface informationCodex;
     }
 
     public void unglückszahlenErstellen() throws InvalidInputException {
+        lgr.info("unglückszahlenErstellen() würde angerufen");
         Scanner scanner = new Scanner(System.in);
         unglückszahlen.clear();
         String[] splitInput = new String[6];
@@ -67,35 +69,44 @@ private final InformationServiceInterface informationCodex;
                 if (tmp <= max && tmp > 0) {
                     unglückszahlen.add(Integer.parseInt(unglückszahl));
                 } else {
-                    lgr.error("Diese Zahl: " + unglückszahl + " ist außerhalb des Lottotyps");
+                    System.out.println("Diese Zahl: " + unglückszahl + " ist außerhalb des Lottotyps");
                 }
             } catch (NumberFormatException e) {
-                lgr.info("Ungültige Zahl: " + unglückszahl);
+                lgr.info("Hier würde ein falsche input eingegeben: " + unglückszahl);
             }
         }
     }
+
     public void addUnglückszahl() {
-        boolean anzahlIstVoll=unglückszahlen.size()<6;
-        if(anzahlIstVoll){
+        lgr.info("addUnglückszahl() würde angerufen");
+        boolean anzahlIstVoll = unglückszahlen.size() == 6;
+        if (!anzahlIstVoll) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Gib die Zahl, die hinzugefügt wird");
             String scannerInput = scanner.nextLine();
-
-            Integer input= Integer.parseInt(scannerInput);
-            if (!unglückszahlen.contains(input)){
-                unglückszahlen.add(input);
-            }else {
-                lgr.error("Du hast eine Unglückszahl eingegeben, die schon eingegeben würde oder ein falsches input");
+            try {
+                Integer input = Integer.parseInt(scannerInput);
+                if (!unglückszahlen.contains(input)) {
+                    unglückszahlen.add(input);
+                } else {
+                    lgr.info("Du hast eine Unglückszahl eingegeben, die schon eingegeben würde oder ein falsches input");
+                    System.out.println("Du hast eine Unglückszahl eingegeben, die schon eingegeben würde oder ein falsches input");
+                }
+            } catch (NumberFormatException e) {
+                lgr.info("Hier würde ein falsche input eingegeben: " + scannerInput);
+                System.out.println(scannerInput+" ist not a valid input");
             }
-        }else {
-            lgr.error("Du hast schon 6 Unglückszahlen eingetragen. Bitte löscht deine Unglückszahlen, um neuen einzutragen");
+
+        } else {
+            lgr.info("Du hast schon 6 Unglückszahlen eingetragen. Bitte löscht deine Unglückszahlen, um neuen einzutragen");
+            System.out.println("Du hast schon 6 Unglückszahlen eingetragen. Bitte löscht deine Unglückszahlen, um neuen einzutragen");
         }
 
     }
 
     public void deleteUnglückszahl() {
-
-        while (true){
+        lgr.info("deleteUnglückszahl() würde angerufen");
+        while (true) {
             System.out.println("Hier kann man einzelne oder alle Unglückszahlen");
             System.out.println();
             System.out.println("1. Alle Zahlen löschen.");
@@ -103,14 +114,16 @@ private final InformationServiceInterface informationCodex;
             System.out.println("3. Zurück.");
             Scanner scanner = new Scanner(System.in);
             String input = scanner.nextLine();
-            switch (input){
-                case "1","alle"->unglückszahlen.clear();
-                case "2","einzeln"-> deleteEinzelzahl();
-                case "3","zurück"->{
+            switch (input) {
+                case "1", "alle" -> unglückszahlen.clear();
+                case "2", "einzeln" -> deleteEinzelzahl();
+                case "3", "zurück" -> {
+                    lgr.info("zurück in mainUnglückszahlenMenu");
                     return;
                 }
                 default -> {
-                    lgr.error("Ungültige Auswahl. Bitte versuche es erneut.");
+                    lgr.info("Ungültige Auswahl. Bitte versuche es erneut.");
+                    System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
                 }
             }
         }
@@ -118,20 +131,26 @@ private final InformationServiceInterface informationCodex;
     }
 
     public void deleteEinzelzahl() {
+        lgr.info("deleteEinzelzahl() würde angerufen");
+
         System.out.println("Gib bitte eine einzel Zahl");
-        Scanner scanner= new Scanner(System.in);
-        Integer input= scanner.nextInt();
-        if (!unglückszahlen.contains(input)){
+        Scanner scanner = new Scanner(System.in);
+        Integer input = scanner.nextInt();
+        if (!unglückszahlen.contains(input)) {
             System.out.println("Diese Zahl ist nicht in deine Unglückszahlen");
-        }else {
+            lgr.info("Diese Zahl ist nicht in deine Unglückszahlen");
+        } else {
             unglückszahlen.remove(input);
         }
     }
+
     public void unglückszahlenBearbeiten() throws InvalidInputException {
+        lgr.info("unglückszahlenBearbeiten() würde angerufen");
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Du hast Unglückszahlenbearbeitung gewählt");
-        while (true){
+        while (true) {
             System.out.println("Nimm bitte eine Auswahl");
             System.out.println("1. unglückszahlen eingeben(Reihe).");
             System.out.println("2. Unglückszahlen löschen");
@@ -142,21 +161,23 @@ private final InformationServiceInterface informationCodex;
             System.out.println("Hier sind deine aktuelle Unglückszahlen:" + unglückszahlen.toString());
             String input = scanner.nextLine();
             System.out.println();
-            switch (input){
+            switch (input) {
                 case "1", "reihe" -> unglückszahlenErstellen();
                 case "2", "löschen" -> deleteUnglückszahl();
                 case "3", "einzeln" -> addUnglückszahl();
-                case "4", "information"-> informationCodex.informationUnglückszahlen();
+                case "4", "information" -> informationCodex.informationUnglückszahlen();
                 case "5", "zurück" -> {
+                    lgr.info("Zurück zu main Menu");
                     return;
                 }
                 default -> {
-                    lgr.error("Ungültige Auswahl. Bitte versuche es erneut.");
-                    informationCodex.informationUnglückszahlen();                }
+                    lgr.info("Ungültige Auswahl. Bitte versuche es erneut.");
+                    System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
+                    informationCodex.informationUnglückszahlen();
+                }
             }
 
         }
-
 
 
     }

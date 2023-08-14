@@ -16,14 +16,14 @@ public class LottoService implements LottoserviceInterface {
     private final InformationServiceInterface informationCodex;
     private final UnglückszahlenServiceInterface unglückszahlenService;
     private final TippreiheServiceInterface tippreiheService;
-    private LogServiceInterface lgr;
+    private LogServiceInterface lgrLotto;
 
     public LottoService() throws IOException {
         setRunning(true);
         informationCodex = new InformationService();
         unglückszahlenService = new UnglücksZahlenService();
         tippreiheService= new TippreiheService();
-        lgr= new LogService(LottoService.class);
+        lgrLotto = new LogService(LottoService.class);
     }
 
     public boolean getIsRunning() {
@@ -38,14 +38,14 @@ public class LottoService implements LottoserviceInterface {
     public void abschließen() {
 
         System.out.println("Danke für die Verwendung von Glücksspiel 3000");
-        lgr.info("Programm ist abgeschlossen");
+        lgrLotto.info("Programm ist abgeschlossen");
         setRunning(false);
 
     }
 
     @Override
     public void starten() throws InvalidInputException {
-        lgr.info("Program ist gestartet");
+        lgrLotto.info("Program ist gestartet");
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Willkommen in Glücksspiel 3000");
@@ -69,7 +69,7 @@ public class LottoService implements LottoserviceInterface {
                 case "5", "abschließen" -> abschließen();
                 default -> {
                     System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
-                    lgr.info("Ungültige Auswahl. Bitte versuche es erneut.");
+                    lgrLotto.info("Ungültige Auswahl. Bitte versuche es erneut.");
                     informationCodex.information();                }
             }
         }

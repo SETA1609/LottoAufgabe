@@ -9,14 +9,17 @@ public class LogService implements LogServiceInterface{
     private FileHandler fh;
 
     public LogService(Class<?> currentClass) throws IOException {
+       // System.out.println("Initializing logger for class: " + currentClass.getName());
         this.lgr = Logger.getLogger(currentClass.getName());
+        LogManager.getLogManager().reset();
+        lgr.setLevel(Level.ALL);
         ch= new ConsoleHandler();
         ch.setLevel(Level.SEVERE);
         lgr.addHandler(ch);
         try {
-            fh = new FileHandler("reiheErsteller/resources/logs/LottoLog.log", true);
+            fh = new FileHandler("reiheErsteller/resources/logs/LottoLogs.txt",true);
             fh.setFormatter(new SimpleFormatter());
-            fh.setLevel(Level.ALL);
+            fh.setLevel(Level.INFO);
             lgr.addHandler(fh);
         }catch (IOException e){
             error("FileHandler funktioniert nicht!");

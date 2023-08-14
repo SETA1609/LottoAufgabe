@@ -15,6 +15,7 @@ public class InformationService implements InformationServiceInterface {
 
     @Override
     public void information() {
+        lgr.info("information() würde angerufen.");
         System.out.println("Hier gibts wichtige informationen");
         System.out.println();
         System.out.println("Schreib bitte die Zahl der Auswahl wie: '1'");
@@ -29,6 +30,7 @@ public class InformationService implements InformationServiceInterface {
 
     @Override
     public void informationUnglückszahlen() {
+        lgr.info("informationUnglückszahlen() würde angerufen.");
         System.out.println("Hier gibts wichtige informationen");
         System.out.println();
         System.out.println("Schreib bitte die Zahl der Auswahl wie: '1'");
