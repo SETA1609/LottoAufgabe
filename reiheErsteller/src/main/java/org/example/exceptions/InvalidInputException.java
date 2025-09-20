@@ -1,8 +1,12 @@
-package org.example.exeptions;
+package org.example.exceptions;
 
-public class InvalidInputException extends Exception{
+/**
+ * Signals invalid user input within the console application.
+ */
+public class InvalidInputException extends Exception {
 
     public InvalidInputException() {
+        super();
     }
 
     public InvalidInputException(String message) {

@@ -18,6 +18,7 @@ class TippreiheServiceTest {
 
     @BeforeEach
     void setUpStreams() {
+        outputStream.reset();
         System.setOut(new PrintStream(outputStream));
     }
 

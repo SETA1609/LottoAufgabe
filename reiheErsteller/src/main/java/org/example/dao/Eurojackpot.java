@@ -1,54 +1,63 @@
 package org.example.dao;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
+/**
+ * Represents the Eurojackpot lottery tip which consists of two separate draws.
+ */
 public class Eurojackpot extends Tippreihe {
-    private HashSet<Integer> zweiAusZehn;
-    private List<Integer>sortedZweiAusZehn;
+
+    private final Set<Integer> zweiAusZehn;
+    private List<Integer> sortedZweiAusZehn;
+
+    /**
+     * Creates a Eurojackpot tip without unlucky numbers.
+     */
     public Eurojackpot() {
-        super();
-        zweiAusZehn=new HashSet<>();
-        setZweiAusZehn();
-        setSortedZweiAusZehn();
-    }
-    public Eurojackpot(HashSet<Integer> unglückszahlen) {
-        super(unglückszahlen, LottoTyp.EUROJACKPOT);
-        zweiAusZehn=new HashSet<>();
-        setZweiAusZehn();
-        setSortedZweiAusZehn();
+        this(new HashSet<>());
     }
 
-    public HashSet<Integer> getZweiAusZehn() {
-        return zweiAusZehn;
+    /**
+     * Creates a Eurojackpot tip that excludes the provided unlucky numbers.
+     */
+    public Eurojackpot(Set<Integer> unglueckszahlen) {
+        this(unglueckszahlen, new Random());
     }
 
-    public void setZweiAusZehn() {
+    /**
+     * Visible for testing to inject a deterministic random number generator.
+     */
+    Eurojackpot(Set<Integer> unglueckszahlen, Random random) {
+        super(random, unglueckszahlen, LottoTyp.EUROJACKPOT);
+        zweiAusZehn = new HashSet<>();
+        generateZweiAusZehn();
+        sortiereZweiAusZehn();
+    }
 
-        int randomInt;
-        while (zweiAusZehn.size()<=1){
-            try {
-                randomInt = (int) (Math.random() * 11);
-                if (!zweiAusZehn.contains(randomInt) && !super.getUnglückszahlen().contains(randomInt) && randomInt != 0) {
-                    zweiAusZehn.add(randomInt);
-                }
-            } catch (Exception e) {
-                // logging the exception
-            }
-        }
-
+    public Set<Integer> getZweiAusZehn() {
+        return Collections.unmodifiableSet(zweiAusZehn);
     }
 
     public List<Integer> getSortedZweiAusZehn() {
-        return sortedZweiAusZehn;
+        return Collections.unmodifiableList(sortedZweiAusZehn);
     }
 
-    public void setSortedZweiAusZehn() {
-        sortedZweiAusZehn=new ArrayList<>(zweiAusZehn);
+    private void generateZweiAusZehn() {
+        while (zweiAusZehn.size() < 2) {
+            int randomValue = getRandom().nextInt(10) + 1;
+            if (!zweiAusZehn.contains(randomValue) && !getUnglueckszahlen().contains(randomValue)) {
+                zweiAusZehn.add(randomValue);
+            }
+        }
+    }
+
+    private void sortiereZweiAusZehn() {
+        sortedZweiAusZehn = new ArrayList<>(zweiAusZehn);
         Collections.sort(sortedZweiAusZehn);
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }
