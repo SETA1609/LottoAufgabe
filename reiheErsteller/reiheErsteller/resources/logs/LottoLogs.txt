@@ -1,20 +1,30 @@
-Sep 24, 2025 4:07:54 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:16 AM org.example.business.logging.LogService info
 INFO: Neue Reihe für Lotto 6aus49 wurde erstellt
-Sep 24, 2025 4:07:54 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:16 AM org.example.business.logging.LogService info
 INFO: Neue Reihe für Lotto Eurojackpot wurde erstellt
-Sep 24, 2025 4:07:54 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:16 AM org.example.business.logging.LogService info
 INFO: unglueckszahlenErstellen() wurde aufgerufen
-Sep 24, 2025 4:07:54 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:16 AM org.example.business.logging.LogService info
 INFO: addUnglueckszahl() wurde aufgerufen
-Sep 24, 2025 4:07:54 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:16 AM org.example.business.logging.LogService info
 INFO: deleteEinzelzahl() wurde aufgerufen
-Sep 24, 2025 4:08:48 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:56 AM org.example.business.logging.LogService info
 INFO: Neue Reihe für Lotto 6aus49 wurde erstellt
-Sep 24, 2025 4:08:48 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:56 AM org.example.business.logging.LogService info
 INFO: Neue Reihe für Lotto Eurojackpot wurde erstellt
-Sep 24, 2025 4:08:48 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:56 AM org.example.business.logging.LogService info
 INFO: unglueckszahlenErstellen() wurde aufgerufen
-Sep 24, 2025 4:08:48 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:57 AM org.example.business.logging.LogService info
 INFO: addUnglueckszahl() wurde aufgerufen
-Sep 24, 2025 4:08:48 AM org.example.business.logging.LogService info
+Sep 24, 2025 4:10:57 AM org.example.business.logging.LogService info
+INFO: deleteEinzelzahl() wurde aufgerufen
+Sep 24, 2025 4:11:20 AM org.example.business.logging.LogService info
+INFO: Neue Reihe für Lotto 6aus49 wurde erstellt
+Sep 24, 2025 4:11:20 AM org.example.business.logging.LogService info
+INFO: Neue Reihe für Lotto Eurojackpot wurde erstellt
+Sep 24, 2025 4:11:20 AM org.example.business.logging.LogService info
+INFO: unglueckszahlenErstellen() wurde aufgerufen
+Sep 24, 2025 4:11:20 AM org.example.business.logging.LogService info
+INFO: addUnglueckszahl() wurde aufgerufen
+Sep 24, 2025 4:11:20 AM org.example.business.logging.LogService info
 INFO: deleteEinzelzahl() wurde aufgerufen
