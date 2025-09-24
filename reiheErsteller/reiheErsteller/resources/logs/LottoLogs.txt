@@ -28,3 +28,5 @@ Sep 24, 2025 4:11:20 AM org.example.business.logging.LogService info
 INFO: addUnglueckszahl() wurde aufgerufen
 Sep 24, 2025 4:11:20 AM org.example.business.logging.LogService info
 INFO: deleteEinzelzahl() wurde aufgerufen
+Sep 24, 2025 4:11:52 AM org.example.business.logging.LogService info
+INFO: Programm wurde gestartet
