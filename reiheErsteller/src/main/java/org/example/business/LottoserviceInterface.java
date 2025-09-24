@@ -1,9 +1,21 @@
 package org.example.business;
 
-import org.example.exeptions.InvalidInputException;
+import org.example.exceptions.InvalidInputException;
 
+/**
+ * Defines the console based flow of the lottery application.
+ */
 public interface LottoserviceInterface {
-    public void abschließen();
-    public void starten() throws InvalidInputException;
 
+    /**
+     * Stops the interactive session.
+     */
+    void abschliessen();
+
+    /**
+     * Starts the interactive session.
+     *
+     * @throws InvalidInputException when user input cannot be processed
+     */
+    void starten() throws InvalidInputException;
 }

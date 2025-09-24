@@ -1,17 +1,24 @@
 package org.example.dao;
 
 import java.util.HashSet;
+import java.util.Set;
 
-public class Lotto6Aus49 extends Tippreihe{
+/**
+ * Represents the classic 6aus49 lottery tip.
+ */
+public class Lotto6Aus49 extends Tippreihe {
+
+    /**
+     * Creates a standard Lotto 6aus49 tip without unlucky numbers.
+     */
     public Lotto6Aus49() {
+        super(new HashSet<>(), LottoTyp.LOTTO6AUS49);
     }
 
-    public Lotto6Aus49(HashSet<Integer> unglückszahlen) {
-        super(unglückszahlen,LottoTyp.LOTTO6AUS49);
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
+    /**
+     * Creates a Lotto 6aus49 tip excluding the provided unlucky numbers.
+     */
+    public Lotto6Aus49(Set<Integer> unglueckszahlen) {
+        super(unglueckszahlen, LottoTyp.LOTTO6AUS49);
     }
 }

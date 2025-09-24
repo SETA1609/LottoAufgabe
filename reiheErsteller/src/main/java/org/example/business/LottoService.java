@@ -1,79 +1,102 @@
 package org.example.business;
 
-import org.example.business.information.*;
+import org.example.business.information.InformationService;
+import org.example.business.information.InformationServiceInterface;
 import org.example.business.logging.LogService;
 import org.example.business.logging.LogServiceInterface;
-import org.example.business.tippreihe.*;
-import org.example.business.unglückszahlen.*;
-import org.example.exeptions.*;
+import org.example.business.tippreihe.TippreiheService;
+import org.example.business.tippreihe.TippreiheServiceInterface;
+import org.example.business.unglueckszahlen.UngluecksZahlenService;
+import org.example.business.unglueckszahlen.UnglueckszahlenServiceInterface;
+import org.example.exceptions.InvalidInputException;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Scanner;
 
+/**
+ * Coordinates the interaction between the presentation layer and the domain services.
+ */
 public class LottoService implements LottoserviceInterface {
 
-    private boolean isRunning;
-    private final InformationServiceInterface informationCodex;
-    private final UnglückszahlenServiceInterface unglückszahlenService;
+    private boolean running;
+    private final InformationServiceInterface informationService;
+    private final UnglueckszahlenServiceInterface unglueckszahlenService;
     private final TippreiheServiceInterface tippreiheService;
-    private LogServiceInterface lgrLotto;
+    private final LogServiceInterface logger;
 
+    /**
+     * Creates the service with the default implementations.
+     *
+     * @throws IOException when one of the dependencies cannot be initialised
+     */
     public LottoService() throws IOException {
-        setRunning(true);
-        informationCodex = new InformationService();
-        unglückszahlenService = new UnglücksZahlenService();
-        tippreiheService= new TippreiheService();
-        lgrLotto = new LogService(LottoService.class);
+        this(new InformationService(), new UngluecksZahlenService(), new TippreiheService(), new LogService(LottoService.class));
     }
 
-    public boolean getIsRunning() {
-        return isRunning;
+    LottoService(InformationServiceInterface informationService,
+                 UnglueckszahlenServiceInterface unglueckszahlenService,
+                 TippreiheServiceInterface tippreiheService,
+                 LogServiceInterface logger) {
+        this.informationService = informationService;
+        this.unglueckszahlenService = unglueckszahlenService;
+        this.tippreiheService = tippreiheService;
+        this.logger = logger;
+        this.running = true;
     }
 
-    public void setRunning(boolean running) {
-        isRunning = running;
+    boolean isRunning() {
+        return running;
     }
 
+    void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    /**
+     * Ends the console session and prints a farewell message.
+     */
     @Override
-    public void abschließen() {
-
+    public void abschliessen() {
         System.out.println("Danke für die Verwendung von Glücksspiel 3000");
-        lgrLotto.info("Programm ist abgeschlossen");
+        logger.info("Programm wurde beendet");
         setRunning(false);
-
     }
 
+    /**
+     * Starts the main application loop and evaluates user input.
+     *
+     * @throws InvalidInputException when the unlucky numbers module raises an input issue
+     */
     @Override
     public void starten() throws InvalidInputException {
-        lgrLotto.info("Program ist gestartet");
+        logger.info("Programm wurde gestartet");
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Willkommen in Glücksspiel 3000");
 
-        while (getIsRunning()) {
-            System.out.println("Bitte wählt einer unsere optionen");
+        while (isRunning()) {
+            System.out.println("Bitte wählt eine unserer Optionen");
             System.out.println("1. 6aus49 Reihe.");
             System.out.println("2. Eurojackpot Reihe.");
             System.out.println("3. Unglückszahlen bearbeiten.");
             System.out.println("4. Information");
-            System.out.println("5. Program abschließen.");
+            System.out.println("5. Programm abschließen.");
             System.out.println("Gib bitte deine Auswahl ein:");
 
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().toLowerCase();
 
             switch (input) {
-                case "1", "6aus49" -> tippreiheService.lotto6Aus49Erstellen(unglückszahlenService.getUnglückszahlen());
-                case "2", "eurojackpot" -> tippreiheService.eurojackpotErstellen(unglückszahlenService.getUnglückszahlen());
-                case "3", "unglückszahlen" -> unglückszahlenService.unglückszahlenBearbeiten();
-                case "4", "information"-> informationCodex.information();
-                case "5", "abschließen" -> abschließen();
+                case "1", "6aus49" -> tippreiheService.lotto6Aus49Erstellen(unglueckszahlenService.getUnglueckszahlen());
+                case "2", "eurojackpot" -> tippreiheService.eurojackpotErstellen(unglueckszahlenService.getUnglueckszahlen());
+                case "3", "unglückszahlen", "unglueckszahlen" -> unglueckszahlenService.unglueckszahlenBearbeiten();
+                case "4", "information" -> informationService.information();
+                case "5", "abschließen", "abschliessen" -> abschliessen();
                 default -> {
                     System.out.println("Ungültige Auswahl. Bitte versuche es erneut.");
-                    lgrLotto.info("Ungültige Auswahl. Bitte versuche es erneut.");
-                    informationCodex.information();                }
+                    logger.info("Ungültige Auswahl. Bitte versuche es erneut.");
+                    informationService.information();
+                }
             }
         }
-
     }
-
 }

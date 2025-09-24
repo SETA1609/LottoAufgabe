@@ -1,51 +1,72 @@
+# Lottery Service
 
-# Lottery Service Dokumentation
+Ein Java-Konsolenprogramm, das Tippempfehlungen für Lotto 6aus49 und Eurojackpot generiert und dabei vom Benutzer gepflegte Unglückszahlen berücksichtigt. Das Projekt wurde umfassend überarbeitet, um eine saubere Architektur, Tests, Linting und eine automatisierte CI-Pipeline bereitzustellen.
 
-Die vorliegende Dokumentation beschreibt die Struktur und Funktionalität des Lottery Service-Programms. Dieses Programm ermöglicht es Benutzern, Lottozahlen zu generieren, Unglückszahlen zu verwalten und Informationen über das Programm anzuzeigen.
+## Inhalt
 
-## Inhaltsverzeichnis
-
-- [Klassenübersicht](#klassenübersicht)
-- [Funktionsweise](#funktionsweise)
-- [Nutzung](#nutzung)
+- [Architekturüberblick](#architekturüberblick)
+- [Voraussetzungen](#voraussetzungen)
+- [Projekt bauen und testen](#projekt-bauen-und-testen)
+- [Anwendung starten](#anwendung-starten)
+- [Code-Qualität und Linting](#code-qualität-und-linting)
 - [Logging](#logging)
+- [GitHub Actions](#github-actions)
 
-## Klassenübersicht
+## Architekturüberblick
 
-1. `InformationService`: Zeigt Menüs und Informationen für den Benutzer an.
-2. `LogService`: Verwaltet das Protokollieren von Nachrichten für das Programm.
-3. `TippreiheService`: Generiert Lottozahlen für verschiedene Lotterietypen.
-4. `UnglücksZahlenService`: Verwaltet Unglückszahlen für verschiedene Lotterietypen.
-5. `LottoService`: Die Hauptklasse, die die Benutzerinteraktion koordiniert.
+Der Quellcode befindet sich im Modul [`reiheErsteller`](reiheErsteller/). Die wichtigsten Pakete sind:
 
-## Funktionsweise
+| Paket | Beschreibung |
+|-------|--------------|
+| `org.example.business` | Enthält den `LottoService`, der die Konsoleninteraktion koordiniert. |
+| `org.example.business.information` | Gibt Hilfetexte für Benutzeraktionen aus. |
+| `org.example.business.tippreihe` | Erzeugt Lotteriereihen und kapselt das Logging. |
+| `org.example.business.unglueckszahlen` | Verwaltet Unglückszahlen inklusive Eingabe-Workflow. |
+| `org.example.business.logging` | Stellt eine dünne Logging-Abstraktion bereit und konfiguriert `java.util.logging`. |
+| `org.example.dao` | Domänenobjekte wie `Tippreihe`, `Lotto6Aus49` und `Eurojackpot`. |
+| `org.example.exceptions` | Definiert domänenspezifische Ausnahmen. |
 
-Das Programm bietet dem Benutzer verschiedene Optionen:
+Unit-Tests befinden sich spiegelbildlich unter `src/test/java` und decken zentrale Geschäftslogik (Unglückszahlen, Tippgeneratoren und Services) ab.
 
-- Generieren von Lottozahlen für "6aus49" und "Eurojackpot".
-- Verwalten von Unglückszahlen für verschiedene Lotterietypen.
-- Anzeigen von Informationen über das Programm.
-- Beenden des Programms.
+## Voraussetzungen
 
-## Nutzung
+- Java 17 oder neuer
+- Maven 3.9 oder neuer
 
-1. Starten Sie das Programm, indem Sie die `LottoService` Instanz in main aufrufen.
-2. Wählen Sie aus den angezeigten Menüoptionen:
-  - "6aus49 Reihe": Generieren von Lottozahlen für 6aus49.
-  - "Eurojackpot Reihe": Generieren von Lottozahlen für Eurojackpot. (5aus50 und 2aus10)
-  - "Unglückszahlen bearbeiten": Verwalten von Unglückszahlen.
-  - "Information": Anzeigen von Programminformationen.
-  - "Programm abschließen": Beenden des Programms.
+## Projekt bauen und testen
+
+Führe die folgenden Befehle im Repository-Hauptverzeichnis aus:
+
+```bash
+mvn -f reiheErsteller/pom.xml -B verify
+```
+
+Der Befehl kompiliert den Code, führt alle Unit-Tests aus und startet anschließend Checkstyle zur statischen Codeanalyse. In Umgebungen ohne Internetzugang können die Maven-Downloads fehlschlagen; wiederhole den Befehl in diesem Fall später oder verwende eine Umgebung mit Netzwerkzugriff.
+
+## Anwendung starten
+
+Das Programm lässt sich nach erfolgreichem Build mit folgendem Befehl starten:
+
+```bash
+java -cp reiheErsteller/target/classes org.example.Main
+```
+
+Anschließend führt dich ein Konsolenmenü durch die Erstellung von Tipp­reihen, die Pflege deiner Unglückszahlen sowie den Abruf von Informationsseiten.
+
+## Code-Qualität und Linting
+
+- **Checkstyle** überprüft Einrückungen, Leerzeichen, Javadoc-Dokumentation sowie Import-Richtlinien (`mvn ... verify`).
+- **Strukturierte Services** und **Interface-Abstraktionen** erleichtern das Testen und Logging.
+- **Unit-Tests** für Tippgeneratoren und Unglückszahlen validieren Randfälle (z. B. Ausschluss von Unglückszahlen und deterministische Zufallszahlen in Tests).
 
 ## Logging
 
-Das Programm verwendet das `LogService`-Modul, um Protokollnachrichten zu erstellen. Es werden 2 Protokollwährungsstufen verwendet:
+Alle Services verwenden `LogService`, der Konsolen- und Datei-Logging (`reiheErsteller/resources/logs/LottoLogs.txt`) konfiguriert. Beim ersten Start wird der Log-Ordner automatisch angelegt.
 
-- `info`: Allgemeine Informationen über den Programmablauf.
-- `error`: Fehlermeldungen und Ausnahmen.
+## GitHub Actions
 
-Die Protokolldatei wird unter `reiheErsteller/resources/logs/LottoLogs.txt` gespeichert.
+Die Workflow-Datei [.github/workflows/ci.yml](.github/workflows/ci.yml) führt bei Pull Requests sowie bei Pushes auf den `main`-Branch automatisch `mvn -f reiheErsteller/pom.xml verify` aus. Dadurch werden Build, Tests und Checkstyle-Analyse kontinuierlich überwacht.
 
 ---
 
-Made by @SETA1609 - Sebastian Tamayo
+Viel Erfolg und viel Spaß beim Generieren deiner nächsten Tipp­reihen!

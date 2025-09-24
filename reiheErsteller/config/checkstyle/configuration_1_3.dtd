@@ -1,0 +1,4 @@
+<!ELEMENT module (property | module)*>
+<!ATTLIST module name CDATA #REQUIRED>
+<!ELEMENT property EMPTY>
+<!ATTLIST property name CDATA #REQUIRED value CDATA #REQUIRED>
