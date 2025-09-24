@@ -1,0 +1,4 @@
+org/example/dao/TippreiheTest.class
+org/example/business/tippreihe/TippreiheServiceTest.class
+org/example/business/unglueckszahlen/UngluecksZahlenServiceTest.class
+org/example/dao/EurojackpotTest.class
